@@ -37,9 +37,20 @@ ou en sérigraphie.
 | Accent | Orange International | `#FF5A1F` | 255, 90, 31 | 3,1:1 sur blanc · 4,1:1 sur la dominante |
 | Accent sur fond sombre | Orange International clair | `#FF6A33` | 255, 106, 51 | 6,0:1 sur Nuit |
 | Fond sombre | Nuit | `#071A3E` | 7, 26, 62 | 17,1:1 avec le blanc |
+| Fond sombre secondaire | Marine nuit | `#0A1A3A` | 10, 26, 58 | 17,2:1 avec le blanc · 6,0:1 avec l'accent |
 | Fond clair | Écume | `#F3F5F9` | 243, 245, 249 | papier, écrans, documents |
 
 **Pourquoi cet accent ?** L'orange international est la couleur de sécurité de la marine : canots, engins de sauvetage, marquages. Il porte la ligne de charge, donc le message de sécurité. Complémentaire du bleu coque, il offre le contraste le plus fort de la palette et reste lisible en grand format comme en favicon.
+
+**Marine nuit** (`#0A1A3A`) est le fond sombre secondaire. C'est le bleu nuit profond dans lequel se fige la version sombre de l'animation, et la teinte de la tôle des conteneurs. Le Bleu Coque reste la couleur des lettres et de l'anneau en version claire.
+
+**Sur un conteneur** (voir `brand/mockups/container-dark.svg`) :
+
+- la tôle, les portes, les montants et les rails sont en Marine nuit `#0A1A3A` ;
+- la tôle ondulée, les arêtes et les barres de verrouillage sont en `#1F2C45`, soit Marine nuit plus 7 points de luminance OKLCH avec la chroma × 0,75 (contraste 1,23:1 : visible mais discret) ;
+- le logo horizontal est en blanc et en orange `#FF6A33`, centré sur le flanc.
+
+La largeur du logo représente 42,5 % de la longueur de la paroi, soit 5,18 m sur un 40'. C'est le maximum compatible avec la zone d'exclusion, 1 x au-dessus et au-dessous du logo, entre les rails.
 
 Le logo n'utilise que deux couleurs, en aplat : il s'imprime en deux tons directs, et en un seul avec les versions
 mono.

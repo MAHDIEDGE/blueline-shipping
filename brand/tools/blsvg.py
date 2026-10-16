@@ -155,8 +155,13 @@ def move(path, dx, dy, s=1.0):
     return xform(path, s, 0, 0, s, dx, dy)
 
 
+def is_empty(path):
+    """Vrai si le tracé ne contient aucun segment (path.segments est un générateur)."""
+    return path is None or next(iter(path.segments), None) is None
+
+
 def bounds(path):
-    if not path.segments:
+    if is_empty(path):
         return (0, 0, 0, 0)
     return path.bounds  # (xmin, ymin, xmax, ymax)
 
@@ -338,7 +343,7 @@ def svg(layers, box, title="Blue Line Shipping", pad=0.0):
     w, h = x1 - x0, y1 - y0
     body = []
     for color, path in layers:
-        if path is None or not path.segments:
+        if is_empty(path):
             continue
         p = move(path, -x0, -y0)
         body.append(f'<path fill="{color}" d="{to_d(p)}"/>')
@@ -358,10 +363,10 @@ def flatten(layers):
     out = []
     for i, (role, path) in enumerate(layers):
         above = union(*[p for _, p in layers[i + 1:]])
-        out.append((role, op(path, above, DIFF) if above.segments else path))
+        out.append((role, op(path, above, DIFF)))   # toujours op() : il normalise aussi le tracé
     return out
 
 
 def all_bounds(paths):
-    bs = [bounds(p) for p in paths if p is not None and p.segments]
+    bs = [bounds(p) for p in paths if not is_empty(p)]
     return (min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs))

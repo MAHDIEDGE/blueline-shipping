@@ -92,6 +92,9 @@ class Concept:
             ("Fond sombre", self.names["night"], night, f"{ratio(white, night)} avec le blanc"),
             ("Fond clair", self.names["paper"], p["paper"], "papier, écrans, documents"),
         ]
+        if "night2" in p:
+            rows.insert(4, ("Fond sombre secondaire", self.names["night2"], p["night2"],
+                            f"{ratio(white, p['night2'])} avec le blanc · {ratio(p['accent_dark'], p['night2'])} avec l'accent"))
         table = "\n".join(f"| {r} | {n} | `{h}` | {rgb(h)} | {c} |" for r, n, h, c in rows)
         # règle : la capitale de SHIPPING ne descend pas sous 5 px à l'écran, 1,5 mm imprimée
         hmin_px = int(math.ceil(meta["h_w"] * 5 / meta["h_ship"] / 10.0) * 10)
@@ -100,6 +103,7 @@ class Concept:
         vmin_mm = int(math.ceil(meta["v_w"] * 1.5 / meta["v_ship"] / 5.0) * 5)
         intention = "\n".join(f"{i}. {t}" for i, t in enumerate(self.intention, 1))
         dont = "\n".join(f"- {d}" for d in self.dont)
+        note = f"\n{self.palette_note}\n" if getattr(self, "palette_note", "") else ""
         return f"""# Concept {self.num} — {self.name}
 
 > {self.tagline}
@@ -136,7 +140,7 @@ ou en sérigraphie.
 {table}
 
 **Pourquoi cet accent ?** {self.accent_why}
-
+{note}
 Le logo n'utilise que deux couleurs, en aplat : il s'imprime en deux tons directs, et en un seul avec les versions
 mono.
 
@@ -404,9 +408,19 @@ class C05(Concept):
     family, weights = "Readex Pro", "SemiBold 600 pour BLUE LINE, Regular 400 pour SHIPPING"
     h_gap = 0.26
     palette = {"primary": "#0B2F6E", "accent": "#FF5A1F", "accent_dark": "#FF6A33",
-               "night": "#071A3E", "paper": "#F3F5F9"}
+               "night": "#071A3E", "night2": "#0A1A3A", "paper": "#F3F5F9"}
     names = {"primary": "Bleu Coque", "accent": "Orange International", "accent_dark": "Orange International clair",
-             "night": "Nuit", "paper": "Écume"}
+             "night": "Nuit", "night2": "Marine nuit", "paper": "Écume"}
+    palette_note = ("**Marine nuit** (`#0A1A3A`) est le fond sombre secondaire. C'est le bleu nuit profond dans lequel se "
+                    "fige la version sombre de l'animation, et la teinte de la tôle des conteneurs. Le Bleu Coque reste la "
+                    "couleur des lettres et de l'anneau en version claire.\n\n"
+                    "**Sur un conteneur** (voir `brand/mockups/container-dark.svg`) :\n\n"
+                    "- la tôle, les portes, les montants et les rails sont en Marine nuit `#0A1A3A` ;\n"
+                    "- la tôle ondulée, les arêtes et les barres de verrouillage sont en `#1F2C45`, soit Marine nuit plus "
+                    "7 points de luminance OKLCH avec la chroma × 0,75 (contraste 1,23:1 : visible mais discret) ;\n"
+                    "- le logo horizontal est en blanc et en orange `#FF6A33`, centré sur le flanc.\n\n"
+                    "La largeur du logo représente 42,5 % de la longueur de la paroi, soit 5,18 m sur un 40'. C'est le "
+                    "maximum compatible avec la zone d'exclusion, 1 x au-dessus et au-dessous du logo, entre les rails.")
     intention = [
         "Le disque de Plimsoll est peint sur la coque de chaque navire marchand : c'est la ligne de charge à ne jamais dépasser.",
         "Ici, l'anneau est coupé par la ligne, qui en sort vers l'avant. Le signe dit sécurité, conformité, précision : le cœur du transit et du dédouanement.",

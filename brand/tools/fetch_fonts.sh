@@ -4,7 +4,7 @@
 set -euo pipefail
 DIR="$(cd "$(dirname "$0")" && pwd)/.fonts"
 mkdir -p "$DIR"
-CSS_URL='https://fonts.googleapis.com/css2?family=Manrope:wght@500;800&family=Space+Grotesk:wght@500;700&family=Outfit:wght@400;600&family=Sora:wght@400;600&family=Readex+Pro:wght@400;600'
+CSS_URL='https://fonts.googleapis.com/css2?family=Manrope:wght@500;800&family=Space+Grotesk:wght@500;700&family=Outfit:wght@400;600&family=Sora:wght@400;600&family=Readex+Pro:wght@400;500;600'
 # Sans User-Agent de navigateur, l'API renvoie des fichiers TrueType complets.
 curl -fsSL "$CSS_URL" | python3 -c '
 import re, sys
