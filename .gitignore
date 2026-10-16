@@ -15,3 +15,6 @@ brand/tools/.fonts/
 
 # Node (futur ERP)
 node_modules/
+
+# Images intermédiaires des exports vidéo (brand/motion/tools/render.js)
+brand/motion/.frames/
