@@ -20,11 +20,22 @@ situation : en-tête de site, carte de visite, flanc de conteneur.
 **Recommandation : concept 05, Ligne de charge.** L'argumentaire et les itérations proposées figurent en bas de
 `index.html`.
 
+## Motion et mockups (concept 05)
+
+- [`motion/`](motion/) contient l'animation de révélation du logo (8 s), en version claire ou sombre, plus une fin
+  alternative sur un conteneur (version sombre, 10,8 s). Elle existe en page HTML autonome, en MP4 60 i/s (16:9 et 1:1) et en GIF pour les
+  signatures. La dernière image est identique au pixel près au logo SVG. Storyboard (FR et AR) et commandes dans
+  [`motion/README.md`](motion/README.md).
+- [`mockups/container-dark.svg`](mockups/container-dark.svg) (+ `.png` 2000 px) montre le logo sur le flanc d'un
+  conteneur 40' Marine nuit, pour les plaquettes et le site.
+
 ## Arborescence
 
 ```
 brand/
 ├── index.html                 page de présentation (générée)
+├── motion/                    animation de révélation du logo retenu (voir motion/README.md)
+├── mockups/                   images de mise en situation (conteneur 40')
 ├── logos/
 │   └── concept-0X/
 │       ├── logo-horizontal.svg          symbole + nom côte à côte
