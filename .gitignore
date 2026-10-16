@@ -1,0 +1,17 @@
+# Système / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Polices téléchargées pour générer les logos (voir brand/tools/fetch_fonts.sh)
+brand/tools/.fonts/
+
+# Node (futur ERP)
+node_modules/
