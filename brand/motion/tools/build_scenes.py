@@ -51,10 +51,10 @@ SW_BOLD = 1.5   # silhouettes sur le ciel (portique, coque, château) : un peu p
 SW_REFLECT = 1.5
 
 # --------------------------------------------------------------------------
-# Minutage (secondes). 0 – 9,8 s : exactement la fin conteneur.
+# Minutage (secondes). 0 – 8,0 s : exactement la version sombre (logo figé) ; puis un seul recul, continu.
 # --------------------------------------------------------------------------
 TIMELINE = {
-    "pull": [9.80, 12.00],          # second recul : exponentiel, courbe inOut, du conteneur au plan large
+    "pull": [8.00, 12.00],          # recul continu : exponentiel, une seule courbe inOut, du logo au plan large
     "end": 13.20,                   # tenue 1,2 s
     "fades": {                      # apparition des éléments du décor (fondu), tous terminés avant 12,0 s
         "ground": [9.80, 10.90],    # quai, mer, reflets
@@ -71,6 +71,17 @@ TIMELINE = {
 }
 
 FORMATS = {"16x9": (1920, 1080), "1x1": (1080, 1080)}
+
+
+def _logo_share():
+    """Part de la largeur occupée par le logo figé, lue dans FORMATS de reveal.html (une seule source)."""
+    html = open(REVEAL, encoding="utf-8").read()
+    out = {f: float(m) for f, m in re.findall(r"'(16x9|1x1)':\s*\{[^}]*logo:\s*([0-9.]+)", html)}
+    assert set(out) == set(FORMATS), "FORMATS introuvable dans reveal.html"
+    return out
+
+
+LOGO_SHARE = _logo_share()
 MOCKUP = (2000, 1125)          # plan final 16:9 mis à l'échelle
 STAR_SEED = {"port": 0x5EA, "ship": 0xB0A7}
 N_STARS = 56
@@ -430,13 +441,21 @@ def final_camera(sc, fmt, W, H):
     return s2, (qx, qy)
 
 
+def logo_framing(W, H):
+    """Cadrage du logo figé (layout() dans reveal.html) : échelle k et coin (X0, Y0), au pixel entier."""
+    fmt = next(f for f, wh in FORMATS.items() if wh == (W, H))
+    k = LOGO_SHARE[fmt] * W / BC.LOGO_W
+    return k, math.floor((W - k * BC.LOGO_W) / 2 + 0.5), math.floor((H - k * BC.LOGO_H) / 2 + 0.5)
+
+
 def camera(t, W, H, s2, q2):
-    """Même caméra que sceneCamera() dans reveal.html."""
-    s1 = BC.FRAMING["width"] * W / (BOX[2] - BOX[0])
-    q1 = (W / 2, BC.FRAMING["center_y"] * H)
+    """Même caméra que sceneCamera() dans reveal.html : du logo figé (8,0 s) au plan large (12,0 s), en une seule
+    courbe ; l'échelle décroît de façon exponentielle, le centre de notre conteneur glisse en ligne droite."""
+    k, X0, Y0 = logo_framing(W, H)
+    q0 = (X0 + PC[0] * k, Y0 + PC[1] * k)
     e = IN_OUT(seg(t, TIMELINE["pull"]))
-    s = s1 * (s2 / s1) ** e
-    qx, qy = q1[0] + (q2[0] - q1[0]) * e, q1[1] + (q2[1] - q1[1]) * e
+    s = k * (s2 / k) ** e
+    qx, qy = q0[0] + (q2[0] - q0[0]) * e, q0[1] + (q2[1] - q0[1]) * e
     return s, qx - PC[0] * s, qy - PC[1] * s
 
 

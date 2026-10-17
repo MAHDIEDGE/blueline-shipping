@@ -9,7 +9,8 @@ Pour chaque rendu (images PNG sans perte de .frames/, MP4, GIF) :
    affiché en <img>.
    Fin conteneur : les 480 premières images identiques à la version sombre, le logo sur la paroi aux proportions exactes
    du SVG, la zone d'exclusion libre.
-   Fins port et navire : jusqu'à 9,8 s identiques à la fin conteneur ; au plan final, logo ≥ 12 % de la largeur
+   Fins port et navire : jusqu'à 8,0 s identiques à la version sombre, puis un recul continu sans arrêt ; au plan
+   final, logo ≥ 12 % de la largeur
    d'image, zone d'exclusion libre, étoiles fixes hors de la zone et hors de tout objet, ciel exact (bandes de
    1 niveau, sans tramage), lune, orange réservé à la ligne et au feu, feux de 4 px, navire ≈ 85 % de la largeur.
 0. Fins « logo seul » et « conteneur » strictement inchangées : empreintes des pixels de chaque image comparées à
@@ -46,16 +47,15 @@ JOBS = {
     "dark-1x1": dict(mp4="reveal-dark-1x1.mp4", W=1080, H=1080, theme="dark", curve=(0.0, 5.4)),
     "container-16x9": dict(mp4="reveal-container-16x9.mp4", W=1920, H=1080, theme="dark", curve=(0.0, 5.4),
                            container=True, same_as="dark-16x9"),
-    # fins port et navire : identiques à la fin conteneur jusqu'à 9,8 s (en 1:1, à la version sombre jusqu'à 8,0 s,
-    # puis l'une à l'autre jusqu'à 9,8 s)
+    # fins port et navire : identiques à la version sombre jusqu'à 8,0 s (logo figé), puis un seul recul continu
     "port-16x9": dict(mp4="reveal-port-16x9.mp4", W=1920, H=1080, theme="dark", curve=(0.0, 5.4), container=True,
-                      scene="port", same_as="container-16x9", upto=9.8),
+                      scene="port", same_as="dark-16x9"),
     "port-1x1": dict(mp4="reveal-port-1x1.mp4", W=1080, H=1080, theme="dark", curve=(0.0, 5.4), container=True,
                      scene="port", same_as="dark-1x1"),
     "ship-16x9": dict(mp4="reveal-ship-16x9.mp4", W=1920, H=1080, theme="dark", curve=(0.0, 5.4), container=True,
-                      scene="ship", same_as="container-16x9", upto=9.8),
+                      scene="ship", same_as="dark-16x9"),
     "ship-1x1": dict(mp4="reveal-ship-1x1.mp4", W=1080, H=1080, theme="dark", curve=(0.0, 5.4), container=True,
-                     scene="ship", same_as="dark-1x1", twin="port-1x1", upto_twin=9.8),
+                     scene="ship", same_as="dark-1x1"),
 }
 GIFS = {"reveal-dark.gif": "dark-16x9", "reveal-container.gif": "container-16x9",
         "reveal-port.gif": "port-16x9", "reveal-ship.gif": "ship-16x9"}
@@ -176,16 +176,9 @@ def same_start(frames, ref_dir, n, label):
 
 
 def final_container(d, last, W, H, frames, same_dir, cfg):
-    # 1. le début est exactement la version sombre « logo seul » (fin conteneur), ou la fin conteneur (port, navire)
+    # 1. le début est exactement la version sombre « logo seul »
     n_logo = len(glob.glob(os.path.join(same_dir, "f[0-9][0-9][0-9][0-9].png")))
-    if cfg.get("upto"):
-        same_start(frames, same_dir, int(round(cfg["upto"] * FPS)) + 1, f"rendu {cfg['same_as']}")
-        n_logo = 480
-    else:
-        same_start(frames, same_dir, n_logo, "version sombre « logo seul »")
-    if cfg.get("twin"):
-        same_start(frames, os.path.join(FRAMES, cfg["twin"]), int(round(cfg["upto_twin"] * FPS)) + 1,
-                   f"rendu {cfg['twin']}")
+    same_start(frames, same_dir, n_logo, "version sombre « logo seul »")
     # 2. le logo sur la paroi : mêmes proportions que logo-horizontal.svg
     C = json.load(open(os.path.join(d, "container.json")))
     bx0, by0, bx1, by1 = C["box"]
@@ -380,6 +373,19 @@ def job(name, cfg):
         prev, pbg = cur, cbg
     e = np.array(e)
     if S:
+        # recul continu (port, navire) : de 8,0 à 12,0 s, la vitesse de recul (variation de ln échelle par image)
+        # reste strictement positive et n'a qu'un seul pic, sans creux (pas d'arrêt à 9,8 s)
+        a, b = (round(v * FPS) for v in S["timeline"]["pull"])
+        cams = [col["frames"][i].get("cam") for i in range(a + 1, b + 1)]
+        ls = np.log([c["s"] for c in cams])
+        rate = -np.diff(ls)
+        dips = [round((a + 2 + i) / FPS, 3) for i in range(1, len(rate) - 1)
+                if rate[i] < rate[i - 1] and rate[i] < rate[i + 1]]
+        i98 = round(9.8 * FPS) - (a + 2)
+        check(rate.min() > 0 and not dips,
+              f"recul continu de {a / FPS:.1f} à {b / FPS:.1f} s : vitesse jamais nulle (min {rate.min() / rate.max() * 100:.1f} % "
+              f"du pic, aux extrémités), un seul pic à {(a + 2 + int(np.argmax(rate))) / FPS:.2f} s, aucun creux "
+              f"({dips or 'aucun'}) ; à 9,8 s : {rate[i98] / rate.max() * 100:.0f} % du pic")
         check(star_dev == 0, f"étoiles fixes : une fois apparues, aucune ne change d'un niveau jusqu'à la fin "
                              f"(écart max {star_dev}/255)")
     base = json.load(open(BASELINE)) if os.path.exists(BASELINE) else {}
