@@ -13,8 +13,8 @@ Il existe deux versions et trois fins alternatives, toutes en version sombre :
 | **Claire** (par défaut) | Écume `#F3F5F9`, constant | Bleu Coque `#0B2F6E` | `#FF5A1F` | `logo-horizontal.svg` sur Écume, au pixel près |
 | **Sombre** (`?theme=dark`) | Bleu Coque `#0B2F6E` → Marine nuit `#0A1A3A` | Blanc | `#FF6A33` | `logo-horizontal-reverse.svg` sur Marine nuit, au pixel près |
 | **Fin conteneur** (`?theme=dark&ending=container`) | version sombre, puis la caméra recule | Blanc | `#FF6A33` | le logo peint sur le flanc d'un conteneur 40' Marine nuit |
-| **Fin port** (`?theme=dark&ending=port`) | fin conteneur, puis le recul continue | Blanc | `#FF6A33` | ce conteneur posé sur le quai, de nuit : piles de conteneurs, portique, mer, étoiles, lune |
-| **Fin navire** (`?theme=dark&ending=ship`) | fin conteneur, puis le recul continue | Blanc | `#FF6A33` | ce conteneur sur le pont d'un porte-conteneurs, en mer, de nuit |
+| **Fin port** (`?theme=dark&ending=port`) | version sombre, puis un seul recul continu (8,0 – 12,0 s) | Blanc | `#FF6A33` | ce conteneur posé sur le quai, de nuit : piles de conteneurs, portique, mer, étoiles, lune |
+| **Fin navire** (`?theme=dark&ending=ship`) | version sombre, puis un seul recul continu (8,0 – 12,0 s) | Blanc | `#FF6A33` | ce conteneur sur le pont d'un porte-conteneurs, en mer, de nuit |
 
 Les couleurs du logo sont exactement celles des deux SVG livrés : la version claire reprend
 `logo-horizontal.svg`, la version sombre `logo-horizontal-reverse.svg`.
@@ -29,10 +29,10 @@ Les couleurs du logo sont exactement celles des deux SVG livrés : la version cl
 | `reveal-dark.gif` | Sombre, 800 × 450, 30 i/s, 10,0 s en boucle (0,92 Mo) |
 | `reveal-container-16x9.mp4` | Fin conteneur, 1920 × 1080, 60 i/s, 10,8 s (0,96 Mo) |
 | `reveal-container.gif` | Fin conteneur, 800 × 450, 30 i/s, 12,8 s en boucle (2,37 Mo) |
-| `reveal-port-16x9.mp4` · `reveal-port-1x1.mp4` | Fin port, 1920 × 1080 et 1080 × 1080, 60 i/s, 13,2 s (1,76 Mo · 1,15 Mo) |
-| `reveal-port.gif` | Fin port, 800 × 450, 30 i/s, 15,2 s en boucle (3,79 Mo) |
-| `reveal-ship-16x9.mp4` · `reveal-ship-1x1.mp4` | Fin navire, 1920 × 1080 et 1080 × 1080, 60 i/s, 13,2 s (1,70 Mo · 1,11 Mo) |
-| `reveal-ship.gif` | Fin navire, 800 × 450, 30 i/s, 15,2 s en boucle (3,60 Mo) |
+| `reveal-port-16x9.mp4` · `reveal-port-1x1.mp4` | Fin port, 1920 × 1080 et 1080 × 1080, 60 i/s, 13,2 s (1,67 Mo · 1,13 Mo) |
+| `reveal-port.gif` | Fin port, 800 × 450, 30 i/s, 15,2 s en boucle (3,56 Mo) |
+| `reveal-ship-16x9.mp4` · `reveal-ship-1x1.mp4` | Fin navire, 1920 × 1080 et 1080 × 1080, 60 i/s, 13,2 s (1,59 Mo · 1,04 Mo) |
+| `reveal-ship.gif` | Fin navire, 800 × 450, 30 i/s, 15,2 s en boucle (3,33 Mo) |
 | [`../mockups/container-dark.svg`](../mockups/container-dark.svg) · `.png` | Image fixe du conteneur pour plaquettes et site : SVG vectoriel et PNG 2000 × 1125 |
 | [`../mockups/port-night.svg`](../mockups/port-night.svg) · `.png` | Plan final de la fin port : SVG vectoriel et PNG 2000 × 1125 |
 | [`../mockups/ship-night.svg`](../mockups/ship-night.svg) · `.png` | Plan final de la fin navire : SVG vectoriel et PNG 2000 × 1125 |
@@ -122,12 +122,12 @@ exacte des tracés, et `verify.py` le contrôle à l'image.
 
 | Temps | Ce qu'on voit | Courbe |
 |---|---|---|
-| 0,00 – 9,80 | Exactement la fin conteneur : les 589 premières images sont identiques au pixel près. | |
-| 9,80 – 12,00 | Second recul, exponentiel : l'échelle est divisée par 2,4 à 2,7 selon la scène et le format. Notre conteneur rapetisse et glisse en ligne droite jusqu'à sa place. Autour de lui, la scène apparaît en fondu : quai, mer et reflets (9,80 – 10,90) ; coque et château (9,85 – 10,95) ; contour du conteneur au trait du décor (9,85 – 11,30) ; piles de conteneurs (9,90 – 11,00) ; portique (10,05 – 11,20) ; haut du ciel qui s'assombrit (9,80 – 11,60) ; marque de Plimsoll (10,60 – 11,50) ; étoiles une à une (11,00 – 11,90, 0,55 s chacune) ; feux (11,20 – 11,80) ; lune (11,35 – 11,95). | `inOut` · `fade` |
+| 0,00 – 8,00 | Exactement la version sombre : les 480 premières images sont identiques au pixel près. | |
+| 8,00 – 12,00 | Un seul recul, continu, sans arrêt, du logo figé au plan large. L'échelle est divisée par 3,3 à 5,7 selon la scène et le format ; le recul est le plus rapide à 10,0 s (à 9,8 s, 88 % de cette vitesse). Comme dans la fin conteneur, la tôle a la couleur du fond : rien ne bouge à 8,0 s, puis les lignes du conteneur apparaissent (8,05 – 9,10) et la tôle ondulée se dessine (8,20 – 9,30). Notre conteneur rapetisse et glisse en ligne droite jusqu'à sa place. Autour de lui, la scène apparaît en fondu : quai, mer et reflets (9,80 – 10,90) ; coque et château (9,85 – 10,95) ; contour du conteneur au trait du décor (9,85 – 11,30) ; piles de conteneurs (9,90 – 11,00) ; portique (10,05 – 11,20) ; haut du ciel qui s'assombrit (9,80 – 11,60) ; marque de Plimsoll (10,60 – 11,50) ; étoiles une à une (11,00 – 11,90, 0,55 s chacune) ; feux (11,20 – 11,80) ; lune (11,35 – 11,95). | `inOut` · `fade` |
 | 12,00 – 13,20 | Plan large figé 1,2 s. | |
 
 Le ciel, les étoiles et la lune sont fixes à l'écran, comme un décor à l'infini : pendant le recul, seul le premier plan
-rapetisse. Les étoiles et la lune n'apparaissent qu'une fois que plus aucun objet ne passera devant elles (11,28 s au
+rapetisse. Les étoiles et la lune n'apparaissent qu'une fois que plus aucun objet ne passera devant elles (10,82 s au
 plus tard pour le portique, devant la place de la lune) ; aucune n'est jamais cachée, puis découverte, ce qui ferait
 scintiller.
 
@@ -182,8 +182,8 @@ scintiller.
 4. **Orange de la version claire.** `#FF5A1F` sur Écume ne fait que 2,86:1. C'est la couleur exacte de
    `logo-horizontal.svg`, et les logos sont exemptés des seuils WCAG. La coque, l'anneau et le texte sont à 11,69:1.
    De même, en version sombre et sur le conteneur, le blanc est à 17,19:1 sur Marine nuit, mais la ligne `#FF6A33`
-   n'y atteint que 6,03:1 : au-dessus du seuil AA (4,5:1), sous le seuil AAA (7:1). Je n'ai pas modifié la couleur
-   du logo.
+   n'y atteint que 6,03:1 : au-dessus du seuil AA (4,5:1), sous 7:1. C'est accepté : le seuil de 7:1 s'applique
+   au texte, pas à la ligne (voir le point 18). La couleur du logo n'est pas modifiée.
 
 Fins port et navire :
 
@@ -195,9 +195,9 @@ Fins port et navire :
    décor à l'infini ; seul le premier plan rapetisse.
 7. **Étoiles et lune tardives.** Pour qu'aucune étoile ne passe derrière le portique en mouvement (elle
    s'éteindrait puis se rallumerait : un scintillement), une étoile n'est placée que si aucun objet ne la couvre
-   entre son apparition et la fin du recul. Le portique balaie le haut à droite jusqu'à 11,28 s. Les étoiles
-   apparaissent donc entre 11,0 et 11,9 s, et la lune entre 11,35 et 11,95 s : toujours pendant le second recul,
-   mais dans sa seconde moitié.
+   entre son apparition et la fin du recul. Le portique balaie le haut à droite jusqu'à 10,82 s. Les étoiles
+   apparaissent entre 11,0 et 11,9 s, et la lune entre 11,35 et 11,95 s : toujours pendant le recul, dans sa
+   dernière partie, quand la scène est presque en place.
 8. **Étoiles dessinées en pixels entiers.** Chrome lisse les très petits disques un peu différemment d'une image à
    l'autre quand la scène bouge (jusqu'à 4 niveaux d'écart). Chaque étoile est donc précalculée : couverture exacte
    du disque sur chaque pixel, puis carrés de 1 px alignés sur la grille. Une fois apparue, une étoile ne change
@@ -223,12 +223,13 @@ Fins port et navire :
     pendant tout le recul.
 16. **Bouton « Fin : … ».** Il affiche la fin en cours (logo seul, conteneur, port, navire) ; un clic passe à la
     suivante.
-17. **Brève respiration à 9,8 s.** Le brief impose la courbe `inOut` aux deux reculs, et les images jusqu'à 9,8 s
-    doivent rester identiques à la fin conteneur. La caméra ralentit donc jusqu'à l'arrêt à 9,8 s, puis repart
-    (environ 0,25 s presque immobile). Pour un recul vraiment continu, il suffirait de faire partir le second recul
-    sans accélération, d'une ligne dans `sceneCamera()` et `build_scenes.py`.
-18. **Contraste de la ligne orange sur la paroi : 6,03:1.** Le blanc du logo est à 17,19:1 ; la ligne orange, élément
-    graphique de la couleur exacte du logo, reste sous 7:1 (voir le point 4).
+17. **Recul continu de 8,0 à 12,0 s (validé).** Pour le port et le navire, une seule courbe `inOut` mène du logo
+    figé au plan large : la caméra ne s'arrête plus à 9,8 s, où elle recule à 88 % de sa vitesse maximale (atteinte
+    à 10,0 s). Les images jusqu'à 8,0 s restent identiques à la version sombre. La fin conteneur garde son propre
+    recul, arrêté à 9,8 s : elle est inchangée.
+18. **Ligne orange à 6,03:1 sur la paroi (validé).** C'est la couleur du logo, `#FF6A33`, et elle ne change pas. Le
+    seuil de 7:1 s'applique au texte : le nom, les marquages et l'anneau, en blanc, sont à 17,19:1. Il ne s'applique
+    pas à la ligne, élément graphique.
 19. **Fin de boucle.** Dans les fins port et navire, la scène s'efface d'un bloc (une seule opacité), pour que le décor
     ne transparaisse pas à travers notre conteneur pendant le fondu.
 20. **Aperçu dans le navigateur.** Si la fenêtre n'a pas les proportions du format, le ciel et la mer débordent dans
@@ -268,6 +269,10 @@ Fins port et navire :
 | Tôle ondulée sur la paroi | 1,23:1 : discrète, comme demandé | |
 | Traits du décor | 1,23:1 sur Marine nuit, 1,34:1 sur le haut du ciel, 1,19:1 et 1,13:1 sur les conteneurs lointains et proches : discrets | |
 
+**Seuil de 7:1 : il s'applique au texte, pas à la ligne.** Le nom, les marquages et l'anneau, en blanc, sont à
+17,19:1 sur Marine nuit. La ligne orange `#FF6A33` est un élément graphique de la couleur exacte du logo : ses 6,03:1
+sont acceptés et la couleur ne change pas (au-dessus du seuil AA de 4,5:1 et du seuil non-texte de 3:1).
+
 ## Comment c'est construit
 
 `reveal.html` ne contient pas d'animation CSS. Une fonction `renderAt(t)` calcule l'état exact de l'image à l'instant
@@ -279,8 +284,9 @@ Fins port et navire :
 - **à partir de 7,00 s**, l'image n'affiche plus que les quatre `<path>` du SVG du logo, recopiés sans modification
   par `build_reveal.py`. Les lettres animées sont ces mêmes tracés, découpés par contour. Pour les fins conteneur,
   port et navire, ces tracés reçoivent la transformation de la caméra, identique à celle du logo seul à 8,0 s ;
-- **après 9,80 s** (port, navire), `sceneCamera()` part exactement du cadrage final de la fin conteneur. Le décor
-  (repère du monde) suit la caméra ; le ciel, les étoiles et la lune restent fixes ; les feux gardent 4 px.
+- **après 8,00 s**, la fin conteneur suit `containerCamera()` (recul arrêté à 9,8 s) ; les fins port et navire
+  suivent `sceneCamera()`, qui part exactement du cadrage du logo figé et mène au plan large en une seule courbe. Le
+  décor (repère du monde) suit la caméra ; le ciel, les étoiles et la lune restent fixes ; les feux gardent 4 px.
 
 Options d'URL :
 
@@ -392,9 +398,10 @@ Les 7 fichiers MP4 et GIF de ces versions, réencodés, sont aussi identiques à
 
 | Contrôle | port-16x9 · port-1x1 | ship-16x9 · ship-1x1 |
 |---|---|---|
-| Début identique (toutes les images comparées une à une) | 16:9 : 589 images (jusqu'à 9,80 s) = fin conteneur ; 1:1 : 480 images = version sombre, puis port et navire identiques jusqu'à 9,80 s | idem |
+| Début identique (toutes les images comparées une à une) | 480 images (jusqu'à 8,0 s) = version sombre | idem |
+| Recul continu de 8,0 à 12,0 s (caméra de chaque image) | vitesse jamais nulle, un seul pic (10,0 s), aucun creux ; à 9,8 s, 88 % du pic | idem |
 | Largeur du logo au plan final (≥ 12 %) | 269 px = 14,0 % ; 162 px = 15,0 % | 249 px = 13,0 % ; 139 px = 12,9 % |
-| Contraste du logo sur la paroi (≥ 7:1) | blanc 17,19:1 (ligne orange 6,03:1) | idem |
+| Contraste du texte sur la paroi (≥ 7:1, seuil du texte) | blanc 17,19:1 ; ligne orange 6,03:1, acceptée | idem |
 | Zone d'exclusion du logo | seuls la paroi et sa tôle (0 pixel étranger) | idem |
 | Étoiles | 56, de 1,0 à 2,5 px, opacité 0,25 à 0,70 ; aucune dans la zone d'exclusion ni derrière le conteneur ; chacune visible et seule sur le ciel | idem |
 | Étoiles fixes après leur apparition | 0 niveau d'écart jusqu'à la fin | idem |
@@ -408,8 +415,8 @@ Les 7 fichiers MP4 et GIF de ces versions, réencodés, sont aussi identiques à
 | Dernière image du MP4 | PSNR 43,7 et 43,9 dB | 43,9 et 43,7 dB |
 
 GIF : 800 px de large, 30 i/s, fond identique à la vidéo à chaque image, sans tramage, et première image = image
-finale. Poids : 0,92 Mo (`reveal-dark.gif`), 2,37 Mo (`reveal-container.gif`), 3,79 Mo (`reveal-port.gif`) et
-3,60 Mo (`reveal-ship.gif`), pour une limite de 5 Mo. Pour le port et le navire :
+finale. Poids : 0,92 Mo (`reveal-dark.gif`), 2,37 Mo (`reveal-container.gif`), 3,56 Mo (`reveal-port.gif`) et
+3,33 Mo (`reveal-ship.gif`), pour une limite de 5 Mo. Pour le port et le navire :
 - le ciel s'écarte d'au plus 1 niveau de la même réduction sans palette, donc sans bande ;
 - les étoiles ne varient pas d'un seul niveau entre leur apparition et la fin, ni pendant la tenue initiale.
 
@@ -467,8 +474,8 @@ image (9,78 s) : le contrôle d'image figée ne porte que sur les mouvements vis
 
 | التوقيت | ما نراه |
 |---|---|
-| من 0,0 إلى 9,8 ثانية | مطابقتان تمامًا لنهاية الحاوية، صورةً بصورة. |
-| من 9,8 إلى 12,0 ثانية | تواصل الكاميرا الابتعاد بهدوء. تصغر حاويتنا وتنزلق إلى مكانها، ويظهر المشهد حولها تدريجيًا: الرصيف أو السفينة، ثم أكوام الحاويات والرافعة، ثم تزداد السماء قتامة نحو الأعلى. بعدها تظهر النجوم واحدة تلو الأخرى، ثم القمر والأضواء. |
+| من 0,0 إلى 8,0 ثانية | مطابقتان تمامًا للنسخة الداكنة، صورةً بصورة. |
+| من 8,0 إلى 12,0 ثانية | تبتعد الكاميرا في حركة واحدة متصلة، من دون أي توقف. تظهر أولًا خطوط الحاوية حول الشعار، ثم تصغر حاويتنا وتنزلق إلى مكانها، ويظهر المشهد حولها تدريجيًا: الرصيف أو السفينة، ثم أكوام الحاويات والرافعة، ثم تزداد السماء قتامة نحو الأعلى. بعدها تظهر النجوم واحدة تلو الأخرى، ثم القمر والأضواء. |
 | من 12,0 إلى 13,2 ثانية | يبقى المشهد العام ثابتًا لمدة 1,2 ثانية. |
 
 - **الميناء:** حاويتنا موضوعة على الرصيف في المقدمة، إلى يسار الوسط قليلًا (وفي الوسط تمامًا في الصيغة المربعة).
@@ -484,6 +491,8 @@ image (9,78 s) : le contrôle d'image figée ne porte que sur les mouvements vis
   الزرقة في الأعلى إلى اليمين. لا تظهر أي نجمة حول الشعار ولا خلف الكتابة.
 - يبقى عرض الشعار في اللقطة الأخيرة أكبر من 12 % من عرض الصورة، فيبقى مقروءًا. البرتقالي حكر على خط الشعار وأضواء
   الإشارة.
+- تباين النص الأبيض مع جدار الحاوية 17,19:1. أما الخط البرتقالي فتباينه 6,03:1، وهو مقبول: حدّ 7:1 يخص النص لا الخط،
+  ولون الخط هو لون الشعار نفسه ولا يتغير.
 
 **الألوان:** الأزرق الداكن، والأزرق الليلي العميق ودرجاته، والبرتقالي الدولي (لون السلامة في الملاحة البحرية)،
 والأبيض. لا مؤثرات، ولا تدرّج لونيًا إلا في سماء الليل بلونين متقاربين، والحركة هادئة ودقيقة بلا ارتداد.
