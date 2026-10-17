@@ -1,0 +1,28 @@
+{
+ "_note": "Empreintes des rendus « logo seul » et « conteneur » avant l'ajout des fins port et navire (commit f951ded). sha256 des pixels RVB de chaque image ; « all » = sha256 de la suite des empreintes. verify.py --update-baseline les remplace après une modification voulue.",
+ "light-16x9": {
+  "frames": 480,
+  "last": "7203b2fb8493b0733ae10e3a5dc46b86e0403fc7b56b4dd9c9e4180f7648e6e2",
+  "all": "e00eab9831b144d641282bd96fc1da35d607ff111f483f7d18058f61d406d6de"
+ },
+ "light-1x1": {
+  "frames": 480,
+  "last": "34ef4e41ff3385bee88231d897d42143b372050aecd41d35be595151953cb50a",
+  "all": "a29bbc33c5eeca18a8cef6e0c72be04c7eb819c269c8ddf747beff276295673c"
+ },
+ "dark-16x9": {
+  "frames": 480,
+  "last": "06e383b300b8f8d70235215d45f27a44276e28b63de2a8e1b4ae059e93ae20af",
+  "all": "87af52bdb67b35d7bc7de375ca9f0d89c6a08a48dc1ce73fddd5a0b12e5adbb8"
+ },
+ "dark-1x1": {
+  "frames": 480,
+  "last": "705e0d6dd28b72810029e3d62c42eeaa2c7aa6b4d41e56d6fa9f7cdbeb100261",
+  "all": "222cb3582353cf27edaa3ffafd59dffd135ea8f6363151bc1701ba420b61b7cd"
+ },
+ "container-16x9": {
+  "frames": 648,
+  "last": "1215cc331cf27467bf5c93b2a445c958289bb4212d1ba8ddcc31797abab32c40",
+  "all": "62533175535e2d6d6d2f714a06f8052a812576ea61551127cb62e837366026a8"
+ }
+}
