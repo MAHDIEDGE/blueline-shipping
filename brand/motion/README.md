@@ -6,13 +6,15 @@ En 8 secondes, l'animation raconte l'histoire du symbole. Sur la coque d'un carg
 ligne de charge que le navire ne doit jamais dépasser. Elle devient le logo Blue Line Shipping. La ligne orange ne
 change jamais : c'est le fil conducteur, le soleil à l'horizon.
 
-Il existe deux versions et une fin alternative :
+Il existe deux versions et trois fins alternatives, toutes en version sombre :
 
 | Version | Fond | Coque, anneau, texte | Ligne | Dernière image |
 |---|---|---|---|---|
 | **Claire** (par défaut) | Écume `#F3F5F9`, constant | Bleu Coque `#0B2F6E` | `#FF5A1F` | `logo-horizontal.svg` sur Écume, au pixel près |
 | **Sombre** (`?theme=dark`) | Bleu Coque `#0B2F6E` → Marine nuit `#0A1A3A` | Blanc | `#FF6A33` | `logo-horizontal-reverse.svg` sur Marine nuit, au pixel près |
 | **Fin conteneur** (`?theme=dark&ending=container`) | version sombre, puis la caméra recule | Blanc | `#FF6A33` | le logo peint sur le flanc d'un conteneur 40' Marine nuit |
+| **Fin port** (`?theme=dark&ending=port`) | fin conteneur, puis le recul continue | Blanc | `#FF6A33` | ce conteneur posé sur le quai, de nuit : piles de conteneurs, portique, mer, étoiles, lune |
+| **Fin navire** (`?theme=dark&ending=ship`) | fin conteneur, puis le recul continue | Blanc | `#FF6A33` | ce conteneur sur le pont d'un porte-conteneurs, en mer, de nuit |
 
 Les couleurs du logo sont exactement celles des deux SVG livrés : la version claire reprend
 `logo-horizontal.svg`, la version sombre `logo-horizontal-reverse.svg`.
@@ -21,17 +23,25 @@ Les couleurs du logo sont exactement celles des deux SVG livrés : la version cl
 
 | Fichier | Contenu |
 |---|---|
-| [`reveal.html`](reveal.html) | L'animation, autonome (HTML + SVG + JS, aucune dépendance). Elle joue en boucle et propose lecture/pause, curseur, fond clair/sombre, fin logo/conteneur et format 16:9/1:1. |
+| [`reveal.html`](reveal.html) | L'animation, autonome (HTML + SVG + JS, aucune dépendance). Elle joue en boucle et propose lecture/pause, curseur, fond clair/sombre, fin (logo seul, conteneur, port, navire) et format 16:9/1:1. |
 | `reveal-light-16x9.mp4` · `reveal-light-1x1.mp4` | Claire, 1920 × 1080 et 1080 × 1080, 60 i/s, 8,0 s (260 Ko · 225 Ko) |
 | `reveal-dark-16x9.mp4` · `reveal-dark-1x1.mp4` | Sombre, 1920 × 1080 et 1080 × 1080, 60 i/s, 8,0 s (370 Ko · 290 Ko) |
 | `reveal-dark.gif` | Sombre, 800 × 450, 30 i/s, 10,0 s en boucle (0,92 Mo) |
 | `reveal-container-16x9.mp4` | Fin conteneur, 1920 × 1080, 60 i/s, 10,8 s (0,96 Mo) |
 | `reveal-container.gif` | Fin conteneur, 800 × 450, 30 i/s, 12,8 s en boucle (2,37 Mo) |
+| `reveal-port-16x9.mp4` · `reveal-port-1x1.mp4` | Fin port, 1920 × 1080 et 1080 × 1080, 60 i/s, 13,2 s (1,76 Mo · 1,15 Mo) |
+| `reveal-port.gif` | Fin port, 800 × 450, 30 i/s, 15,2 s en boucle (3,79 Mo) |
+| `reveal-ship-16x9.mp4` · `reveal-ship-1x1.mp4` | Fin navire, 1920 × 1080 et 1080 × 1080, 60 i/s, 13,2 s (1,70 Mo · 1,11 Mo) |
+| `reveal-ship.gif` | Fin navire, 800 × 450, 30 i/s, 15,2 s en boucle (3,60 Mo) |
 | [`../mockups/container-dark.svg`](../mockups/container-dark.svg) · `.png` | Image fixe du conteneur pour plaquettes et site : SVG vectoriel et PNG 2000 × 1125 |
+| [`../mockups/port-night.svg`](../mockups/port-night.svg) · `.png` | Plan final de la fin port : SVG vectoriel et PNG 2000 × 1125 |
+| [`../mockups/ship-night.svg`](../mockups/ship-night.svg) · `.png` | Plan final de la fin navire : SVG vectoriel et PNG 2000 × 1125 |
 | `tools/build_reveal.py` | Relit les tracés de `concept-05/` et les injecte dans `reveal.html` (bloc `GEO`) |
 | `tools/build_container.py` | Dessine le conteneur (textes en tracés), vérifie la zone d'exclusion, injecte le bloc `CONTAINER` et écrit le mockup |
+| `tools/build_scenes.py` | Dessine les scènes port et navire (décor, ciel, étoiles, lune, feux, cadrages), vérifie lisibilité et place des étoiles, injecte le bloc `SCENES` et écrit les deux images fixes |
 | `tools/render.js` | Export image par image (Playwright), puis encodage ffmpeg |
-| `tools/verify.py` | Contrôles : dernière image vs SVG, fond, contraste, conteneur, specs, GIF, fluidité |
+| `tools/verify.py` | Contrôles : dernière image vs SVG, fond, contraste, conteneur, scènes, specs, GIF, fluidité |
+| `tools/baseline.json` | Empreintes des images des fins logo seul et conteneur : `verify.py` prouve qu'elles n'ont pas changé d'un pixel |
 
 Toutes les versions sont muettes : aucune piste son n'est livrée.
 
@@ -44,7 +54,19 @@ Toutes les versions sont muettes : aucune piste son n'est livrée.
 | Orange International | `#FF5A1F` · `#FF6A33` | La ligne, inchangée du début à la fin : `#FF5A1F` en version claire, `#FF6A33` en version sombre |
 | Blanc | `#FFFFFF` | Coque, anneau et lettres de la version sombre ; marquages du conteneur |
 | **Marine nuit** | `#0A1A3A` | **Fond sombre secondaire** : fond final de la version sombre, ciel, tôle, portes et montants du conteneur. Il figure dans la charte : [`concept-05/README.md`](../logos/concept-05/README.md). |
-| Lignes du conteneur | `#1F2C45` | Marine nuit + 7 points de luminance OKLCH, chroma × 0,75 : tôle ondulée, arêtes, barres de verrouillage |
+| Lignes du conteneur | `#1F2C45` | Marine nuit + 7 points de luminance OKLCH, chroma × 0,75 : tôle ondulée, arêtes, barres de verrouillage ; tous les traits des scènes port et navire |
+
+Les scènes port et navire déclinent Marine nuit en luminance OKLCH, teinte conservée :
+
+| Ton | Hex | Écart à Marine nuit | Rôle |
+|---|---|---|---|
+| Haut du ciel | `#03102F` | −0,040 | haut de l'image ; le ciel descend en dégradé jusqu'à Marine nuit à l'horizon |
+| Mer | `#051332` | −0,030 | la mer, un ton plus sombre |
+| Quai | `#081737` | −0,012 | face du quai, dans l'ombre |
+| Conteneurs proches | `#14223E` | +0,030, chroma × 0,85 | pile derrière notre conteneur (port), 20' du premier rang (navire) |
+| Conteneurs lointains | `#0F1E3B` | +0,015, chroma × 0,90 | piles du fond (port), rangées arrière (navire) |
+
+L'orange `#FF6A33` n'y sert qu'à la ligne du logo et aux feux de signalisation. La lune est en Écume `#F3F5F9` à 85 %.
 
 ## Storyboard chronométré
 
@@ -96,6 +118,53 @@ Il occupe 676 × 150 px dans la dernière image, et le conteneur 92 % de sa larg
 rayon d'anneau tout autour) ne contient que la paroi et sa tôle. `build_container.py` le vérifie par intersection
 exacte des tracés, et `verify.py` le contrôle à l'image.
 
+### Fins port et navire (version sombre)
+
+| Temps | Ce qu'on voit | Courbe |
+|---|---|---|
+| 0,00 – 9,80 | Exactement la fin conteneur : les 589 premières images sont identiques au pixel près. | |
+| 9,80 – 12,00 | Second recul, exponentiel : l'échelle est divisée par 2,4 à 2,7 selon la scène et le format. Notre conteneur rapetisse et glisse en ligne droite jusqu'à sa place. Autour de lui, la scène apparaît en fondu : quai, mer et reflets (9,80 – 10,90) ; coque et château (9,85 – 10,95) ; contour du conteneur au trait du décor (9,85 – 11,30) ; piles de conteneurs (9,90 – 11,00) ; portique (10,05 – 11,20) ; haut du ciel qui s'assombrit (9,80 – 11,60) ; marque de Plimsoll (10,60 – 11,50) ; étoiles une à une (11,00 – 11,90, 0,55 s chacune) ; feux (11,20 – 11,80) ; lune (11,35 – 11,95). | `inOut` · `fade` |
+| 12,00 – 13,20 | Plan large figé 1,2 s. | |
+
+Le ciel, les étoiles et la lune sont fixes à l'écran, comme un décor à l'infini : pendant le recul, seul le premier plan
+rapetisse. Les étoiles et la lune n'apparaissent qu'une fois que plus aucun objet ne passera devant elles (11,28 s au
+plus tard pour le portique, devant la place de la lune) ; aucune n'est jamais cachée, puis découverte, ce qui ferait
+scintiller.
+
+#### Éléments de la scène « port » (`?ending=port`)
+
+| Élément | Couleur |
+|---|---|
+| Notre conteneur, sur le quai, au premier plan, un peu à gauche du centre (45 % de la largeur en 16:9, centré en 1:1) | tel quel (Marine nuit, lignes `#1F2C45`, logo blanc et `#FF6A33`) |
+| Son contour, redessiné au trait du décor pendant le recul | `#1F2C45`, 1,3 px |
+| 3 piles de conteneurs anonymes (sans logo ni texte), deux niveaux chacune : plus elles sont loin, plus elles sont petites et basses (échelles 0,80, 0,62 et 0,46) | proche `#14223E`, lointaines `#0F1E3B`, arêtes `#1F2C45` |
+| Un portique à conteneurs, à droite, au trait fin, qui dépasse dans le ciel, entier dans les deux formats | `#1F2C45`, 1,5 px |
+| Un feu de signalisation, au sommet du portique | orange `#FF6A33`, point de 4 px |
+| Le quai : face verticale, défenses, arête | `#081737`, traits `#1F2C45` |
+| La mer, tout en bas, avec 5 reflets immobiles | `#051332`, reflets blancs à 15 %, 1,5 px |
+| Ciel, étoiles, lune | voir ci-dessous |
+
+#### Éléments de la scène « navire » (`?ending=ship`)
+
+| Élément | Couleur |
+|---|---|
+| Le cargo du début de l'animation (coque, château, aileron de passerelle, pile), rempli en aplat, vu de côté, sur 85 % de la largeur | aplat Marine nuit `#0A1A3A`, contours `#1F2C45` à 1,5 px |
+| Vitres de passerelle, mât, hampe de proue | `#1F2C45` |
+| Rangées arrière : la pile du début avec ses travées | `#0F1E3B`, arêtes `#1F2C45` |
+| Rangée avant : un 20' anonyme et notre conteneur, au premier rang, seul à porter le logo | `#14223E` ; notre conteneur tel quel |
+| La marque de Plimsoll sur la coque, sous notre conteneur : le cercle traversé par la barre, la barre au ras de l'eau (chargé « juste ») ; la moitié immergée se devine sous la surface | blanc, 1,6 px ; moitié immergée à 30 % |
+| La mer, avec 4 reflets immobiles, sans vagues | `#051332`, reflets blancs à 15 % |
+| Feu de mât, en haut du château | orange `#FF6A33`, 4 px |
+| Feu de proue | blanc, 4 px |
+
+#### Ciel de nuit (les deux scènes)
+
+| Élément | Couleur |
+|---|---|
+| Ciel : deux tons interpolés en OKLCH, du haut de l'image à l'horizon | `#03102F` (Marine nuit −0,040 de luminance) → Marine nuit `#0A1A3A` |
+| 56 étoiles, de 1 à 2,5 px, opacité 0,25 à 0,7, placées par un générateur à graine fixe (mulberry32, graines `0x5EA` pour le port et `0xB0A7` pour le navire, + 101 en 1:1), dans le haut du ciel : à 28 px au moins des silhouettes et à 60 px au moins de notre conteneur | blanc |
+| Lune : croissant fin, en haut à droite, diamètre 7 % de la hauteur d'image (76 px), sans halo, sans visage, sans rayons | Écume `#F3F5F9` à 85 % |
+
 ## Décisions prises (à valider)
 
 1. **Logo à 42,5 % de la paroi au lieu des 55 % demandés.** Sur un flanc de 40', un logo à 55 % de la longueur ferait
@@ -116,11 +185,60 @@ exacte des tracés, et `verify.py` le contrôle à l'image.
    n'y atteint que 6,03:1 : au-dessus du seuil AA (4,5:1), sous le seuil AAA (7:1). Je n'ai pas modifié la couleur
    du logo.
 
+Fins port et navire :
+
+5. **Ciel en bandes de 1 niveau, pas en dégradé SVG.** Chrome trame les dégradés SVG (bruit de ±1 niveau). Avec la
+   palette d'un GIF, ce bruit aurait donné des plaques et des bandes. Le ciel est donc calculé en OKLCH, puis découpé
+   en 29 bandes horizontales, chacune exactement un niveau 8 bits plus claire que la précédente : c'est le dégradé
+   le plus fin possible sans tramage. Les images fixes (SVG) gardent un vrai dégradé, meilleur à l'impression.
+6. **Ciel, étoiles et lune fixes à l'écran, décor dans le monde.** Pendant le recul, le ciel ne bouge pas, comme un
+   décor à l'infini ; seul le premier plan rapetisse.
+7. **Étoiles et lune tardives.** Pour qu'aucune étoile ne passe derrière le portique en mouvement (elle
+   s'éteindrait puis se rallumerait : un scintillement), une étoile n'est placée que si aucun objet ne la couvre
+   entre son apparition et la fin du recul. Le portique balaie le haut à droite jusqu'à 11,28 s. Les étoiles
+   apparaissent donc entre 11,0 et 11,9 s, et la lune entre 11,35 et 11,95 s : toujours pendant le second recul,
+   mais dans sa seconde moitié.
+8. **Étoiles dessinées en pixels entiers.** Chrome lisse les très petits disques un peu différemment d'une image à
+   l'autre quand la scène bouge (jusqu'à 4 niveaux d'écart). Chaque étoile est donc précalculée : couverture exacte
+   du disque sur chaque pixel, puis carrés de 1 px alignés sur la grille. Une fois apparue, une étoile ne change
+   plus d'un seul niveau.
+9. **GIF port et navire : palette commune à partir de 11,0 s.** Avec une palette par image, une étoile fixe
+   changeait de quelques niveaux tant que la scène bougeait. Les images de la tenue initiale et celles qui suivent
+   l'apparition des étoiles partagent donc une palette de 256 couleurs ; les autres gardent une palette par image.
+10. **Traits du décor à épaisseur constante à l'écran** : 1,3 px ; 1,5 px pour le portique, la coque et le château.
+    Pendant le recul, les arêtes de notre conteneur, proportionnelles à l'échelle, tombent sous le pixel. Son contour
+    est donc redessiné au trait du décor, en fondu (9,85 – 11,30 s), pour qu'il reste le plus net de l'image.
+11. **Décor en retrait.** Les conteneurs anonymes ne sont que légèrement plus clairs que Marine nuit (+0,030 et
+    +0,015) et les piles ne font que deux niveaux. Notre conteneur, au premier plan, reste ainsi l'objet le plus net.
+    Un seul portique : deux portiques de profil croisaient leurs structures, et le second sortait du cadre en 1:1.
+12. **Taille du logo au plan final.** Port : 14 % de la largeur en 16:9, 15 % en 1:1. Navire : 13 %. Avec un navire à
+    85 % de la largeur, un logo d'au moins 12 % impose un conteneur d'environ 38 % de la longueur du navire : c'est
+    un petit porte-conteneurs stylisé, avec un seul niveau de conteneurs au premier rang.
+13. **Navire.** La pile du cargo d'ouverture, avec ses travées, devient les rangées arrière. Le premier rang reçoit un
+    20' anonyme et notre conteneur. La moitié immergée de la marque de Plimsoll se devine sous la surface (blanc à
+    30 %), comme la moitié basse de l'anneau du logo.
+14. **Port en 1:1.** Notre conteneur est centré, comme demandé ; en 16:9, il est un peu à gauche du centre (45 % de
+    la largeur). L'horizon est placé à 66 % de la hauteur en 16:9 et à 68 % en 1:1, pour laisser plus de ciel.
+15. **Feux.** L'orange des feux est `#FF6A33`, celui de la ligne en version sombre. Les feux gardent 4 px à l'écran
+    pendant tout le recul.
+16. **Bouton « Fin : … ».** Il affiche la fin en cours (logo seul, conteneur, port, navire) ; un clic passe à la
+    suivante.
+17. **Brève respiration à 9,8 s.** Le brief impose la courbe `inOut` aux deux reculs, et les images jusqu'à 9,8 s
+    doivent rester identiques à la fin conteneur. La caméra ralentit donc jusqu'à l'arrêt à 9,8 s, puis repart
+    (environ 0,25 s presque immobile). Pour un recul vraiment continu, il suffirait de faire partir le second recul
+    sans accélération, d'une ligne dans `sceneCamera()` et `build_scenes.py`.
+18. **Contraste de la ligne orange sur la paroi : 6,03:1.** Le blanc du logo est à 17,19:1 ; la ligne orange, élément
+    graphique de la couleur exacte du logo, reste sous 7:1 (voir le point 4).
+19. **Fin de boucle.** Dans les fins port et navire, la scène s'efface d'un bloc (une seule opacité), pour que le décor
+    ne transparaisse pas à travers notre conteneur pendant le fondu.
+20. **Aperçu dans le navigateur.** Si la fenêtre n'a pas les proportions du format, le ciel et la mer débordent dans
+    les bandes latérales au lieu d'un aplat Marine nuit (sans effet sur les exports, faits au format exact).
+
 ## Direction artistique
 
-- **Palette du concept 05 uniquement**, sans dégradé spatial, particule, 3D ni flou. Seuls des aplats bougent ; les
-  apparitions sont des fondus d'opacité, et le fond de la version sombre change de couleur dans le temps, jamais dans
-  l'espace.
+- **Palette du concept 05 uniquement**, sans particule, 3D ni flou, et sans dégradé spatial, sauf le ciel de nuit des
+  fins port et navire (deux tons voisins). Seuls des aplats bougent ; les apparitions sont des fondus d'opacité, et le
+  fond de la version sombre change de couleur dans le temps, jamais dans l'espace.
 - **Courbes sans rebond.** Ce sont des cubic-bezier qui ne dépassent jamais leur valeur d'arrivée :
   - `inOut` = `(0.65, 0, 0.35, 1)` pour les transitions ;
   - `settle` = `(0.40, 0, 0.70, 0.85)` pour l'enfoncement : départ souple, arrivée encore en mouvement, d'où un arrêt
@@ -129,11 +247,15 @@ exacte des tracés, et `verify.py` le contrôle à l'image.
   - `fade` = `(0.37, 0, 0.63, 1)` pour les fondus ;
   - `night` = `(0.80, 0, 0.50, 1)` pour le fond de la version sombre.
 
-  Les mouvements de caméra (plongée et recul) sont exponentiels : la vitesse perçue reste constante.
+  Les mouvements de caméra (plongée et reculs) sont exponentiels : la vitesse perçue reste constante. Au second
+  recul, le centre de notre conteneur glisse en ligne droite, à l'écran, jusqu'à sa place dans le plan large.
 - **Le texte**, ce sont les tracés Readex Pro du SVG final, découpés lettre par lettre ; les marquages du conteneur
   sont composés en Readex Pro puis convertis en tracés. Aucune police n'est chargée.
 - **Mise en page.** Le logo occupe 46 % de la largeur en 16:9 et 74 % en 1:1, centré, positionné au pixel entier. Le
   conteneur final occupe 92 % de la largeur, centré.
+- **Scènes de nuit.** Aplats de Marine nuit déclinés en luminance et traits fins, sans texture, sans 3D ni
+  perspective : la profondeur vient de la taille (les piles lointaines sont plus petites et plus basses) et du ton
+  (plus proche du ciel au loin). Le seul dégradé est celui du ciel, sur deux tons voisins.
 
 ## Contraste
 
@@ -142,7 +264,9 @@ exacte des tracés, et `verify.py` le contrôle à l'image.
 | Claire | 11,69:1 (Bleu Coque sur Écume) | 2,86:1 (couleur du logo, voir les décisions) |
 | Sombre | 12,76:1 à 17,19:1 (blanc sur Bleu Coque, puis Marine nuit) | 4,47:1 à 6,03:1 |
 | Conteneur | 17,19:1 (blanc sur Marine nuit) | 6,03:1 |
+| Port, navire (logo sur la paroi) | 17,19:1 (blanc sur Marine nuit) | 6,03:1 |
 | Tôle ondulée sur la paroi | 1,23:1 : discrète, comme demandé | |
+| Traits du décor | 1,23:1 sur Marine nuit, 1,34:1 sur le haut du ciel, 1,19:1 et 1,13:1 sur les conteneurs lointains et proches : discrets | |
 
 ## Comment c'est construit
 
@@ -153,8 +277,10 @@ exacte des tracés, et `verify.py` le contrôle à l'image.
 - **à l'export**, `render.js` appelle `renderAt(i / 60)` pour chaque image, ce qui exclut toute image sautée ou
   dupliquée ;
 - **à partir de 7,00 s**, l'image n'affiche plus que les quatre `<path>` du SVG du logo, recopiés sans modification
-  par `build_reveal.py`. Les lettres animées sont ces mêmes tracés, découpés par contour. Pour la fin conteneur, ces
-  tracés reçoivent la transformation de la caméra, identique à celle du logo seul à 8,0 s.
+  par `build_reveal.py`. Les lettres animées sont ces mêmes tracés, découpés par contour. Pour les fins conteneur,
+  port et navire, ces tracés reçoivent la transformation de la caméra, identique à celle du logo seul à 8,0 s ;
+- **après 9,80 s** (port, navire), `sceneCamera()` part exactement du cadrage final de la fin conteneur. Le décor
+  (repère du monde) suit la caméra ; le ciel, les étoiles et la lune restent fixes ; les feux gardent 4 px.
 
 Options d'URL :
 
@@ -162,6 +288,7 @@ Options d'URL :
 |---|---|
 | `?theme=dark` | Version sombre |
 | `?ending=container` | Fin conteneur (avec `theme=dark`) |
+| `?ending=port` · `?ending=ship` | Fins port et navire (avec `theme=dark`) |
 | `?format=1x1` | Format carré |
 | `?t=4.2` | Image fixe à l'instant 4,2 s |
 | `?export=1` | Sans contrôles, expose `window.BLS` |
@@ -173,19 +300,22 @@ Si l'utilisateur a demandé à réduire les animations dans son système, la pag
 Prérequis :
 - Node.js avec Playwright (Chromium) ;
 - ffmpeg (avec libx264) ;
-- Python 3 avec numpy et Pillow, plus fonttools, uharfbuzz et skia-pathops pour `build_container.py` ;
+- Python 3 avec numpy et Pillow, plus fonttools, uharfbuzz et skia-pathops pour `build_container.py` et
+  `build_scenes.py` ;
 - les polices, via `../tools/fetch_fonts.sh`.
 
 ```sh
 python3 brand/motion/tools/build_reveal.py      # 1. relit concept-05/*.svg et met à jour reveal.html
 python3 brand/motion/tools/build_container.py   # 2. conteneur : géométrie, zone d'exclusion, mockups/container-dark.svg
-node brand/motion/tools/render.js               # 3. 5 rendus (2 568 images, ≈ 3 min 30), MP4, 2 GIF, PNG du mockup
-python3 brand/motion/tools/verify.py            # 4. contrôles (≈ 10 min ; code de sortie ≠ 0 en cas d'échec)
+python3 brand/motion/tools/build_scenes.py      # 3. port et navire : décor, ciel, étoiles, mockups/*-night.svg
+node brand/motion/tools/render.js               # 4. 9 rendus (5 736 images, ≈ 8 min), 9 MP4, 4 GIF, 3 PNG fixes
+python3 brand/motion/tools/verify.py            # 5. contrôles (≈ 25 min ; code de sortie ≠ 0 en cas d'échec)
 ```
 
-On peut ne refaire que certains rendus, par exemple `render.js dark-16x9 mockup`, et ne contrôler qu'une partie :
-`verify.py container-16x9 reveal-container.gif mockup`. Les images intermédiaires vont dans `brand/motion/.frames/`,
-ignoré par git.
+On peut ne refaire que certains rendus, par exemple `render.js port-16x9 mockup`, et ne contrôler qu'une partie :
+`verify.py port-16x9 reveal-port.gif mockup`. Après une modification voulue des fins logo seul ou conteneur,
+`verify.py --update-baseline` remplace leurs empreintes dans `tools/baseline.json`. Les images intermédiaires vont
+dans `brand/motion/.frames/`, ignoré par git.
 
 ### Commandes ffmpeg utilisées
 
@@ -217,7 +347,26 @@ Deux options sont alors incompatibles et ont été retirées :
 - `diff_mode=rectangle` réutiliserait les indices de l'image précédente ;
 - la transparence entre images (`transdiff`) mélangerait deux palettes.
 
-Chaque GIF commence sur son image finale (logo ou conteneur) tenue 1,5 s. Viennent ensuite 0,5 s de retour au fond de
+GIF port et navire : la tenue initiale et les images qui suivent l'apparition des étoiles (à partir de 11,0 s)
+partagent une palette de 256 couleurs, calculée sur ces images-là ; le reste garde une palette par image
+(`render.js`, `encodeGif`). Pour reveal-ship.gif (images de la séquence : 45 de tenue, puis 15 de retour, puis
+l'animation ; la palette commune reprend à l'image 390) :
+
+```sh
+ffmpeg -y -framerate 30 -i .frames/gif-ship-16x9/g%04d.png \
+  -vf "select='lt(n\,45)+gte(n\,390)',scale=800:-1:flags=lanczos,palettegen=max_colors=256:stats_mode=full" \
+  .frames/gif-ship-16x9/palette.png
+ffmpeg -y -framerate 30 -i .frames/gif-ship-16x9/g%04d.png -i .frames/gif-ship-16x9/palette.png -filter_complex \
+  "[0:v]scale=800:-1:flags=lanczos,split=3[s1][s2][s3];[1:v]split[p1][p2];\
+   [s1]trim=end_frame=45,setpts=PTS-STARTPTS[a0];[a0][p1]paletteuse=dither=none[A];\
+   [s2]trim=start_frame=45:end_frame=390,setpts=PTS-STARTPTS,split[b1][b2];\
+   [b1]palettegen=max_colors=64:stats_mode=single[pb];[b2][pb]paletteuse=new=1:dither=none[B];\
+   [s3]trim=start_frame=390,setpts=PTS-STARTPTS[c0];[c0][p2]paletteuse=dither=none[C];\
+   [A][B][C]concat=n=3:v=1:a=0" \
+  -gifflags -transdiff -loop 0 reveal-ship.gif
+```
+
+Chaque GIF commence sur son image finale (logo, conteneur ou scène) tenue 1,5 s. Viennent ensuite 0,5 s de retour au fond de
 départ (Marine nuit → Bleu Coque), puis l'animation à 30 i/s (une image sur deux), qui finit sur la même image : la
 boucle est sans couture. Ce choix tient à un défaut d'Outlook pour Windows, qui n'affiche que la première image d'un
 GIF : la signature y montre le logo, pas un fond vide.
@@ -237,9 +386,42 @@ GIF : la signature y montre le logo, pas un fond vide.
 | Saccades, image figée en plein mouvement | aucune | aucune | aucune |
 | Image finale figée | 1,00 s | 1,00 s | 1,00 s |
 | Dernière image du MP4 (H.264 4:2:0) | PSNR 43,7 dB | 44,1 dB | 43,3 dB |
+| **Strictement inchangé** depuis l'ajout des fins port et navire : pixels de chaque image (`baseline.json`) | 480 images, identiques | 480 images, identiques | 648 images, identiques |
+
+Les 7 fichiers MP4 et GIF de ces versions, réencodés, sont aussi identiques à l'octet près.
+
+| Contrôle | port-16x9 · port-1x1 | ship-16x9 · ship-1x1 |
+|---|---|---|
+| Début identique (toutes les images comparées une à une) | 16:9 : 589 images (jusqu'à 9,80 s) = fin conteneur ; 1:1 : 480 images = version sombre, puis port et navire identiques jusqu'à 9,80 s | idem |
+| Largeur du logo au plan final (≥ 12 %) | 269 px = 14,0 % ; 162 px = 15,0 % | 249 px = 13,0 % ; 139 px = 12,9 % |
+| Contraste du logo sur la paroi (≥ 7:1) | blanc 17,19:1 (ligne orange 6,03:1) | idem |
+| Zone d'exclusion du logo | seuls la paroi et sa tôle (0 pixel étranger) | idem |
+| Étoiles | 56, de 1,0 à 2,5 px, opacité 0,25 à 0,70 ; aucune dans la zone d'exclusion ni derrière le conteneur ; chacune visible et seule sur le ciel | idem |
+| Étoiles fixes après leur apparition | 0 niveau d'écart jusqu'à la fin | idem |
+| Ciel | 29 bandes de 1 niveau, de `#03102F` à Marine nuit ; colonne témoin identique au calcul, sans tramage | idem |
+| Lune | 75 px de haut (6,9 % de la hauteur), en haut à droite, teinte = Écume à 85 % (± 1) | idem |
+| Feux | 4 à 5 px (lissage) ; un seul feu orange | 4 à 5 px ; un seul feu orange (mât), un blanc (proue) |
+| Orange ailleurs que sur la ligne et le feu | 0 pixel | 0 pixel |
+| Largeur du navire | | 85,0 % |
+| Saccades, image figée en plein mouvement | aucune | aucune |
+| Image finale figée | 1,20 s | 1,20 s |
+| Dernière image du MP4 | PSNR 43,7 et 43,9 dB | 43,9 et 43,7 dB |
 
 GIF : 800 px de large, 30 i/s, fond identique à la vidéo à chaque image, sans tramage, et première image = image
-finale. Poids : 0,92 Mo (`reveal-dark.gif`) et 2,37 Mo (`reveal-container.gif`), pour une limite de 5 Mo.
+finale. Poids : 0,92 Mo (`reveal-dark.gif`), 2,37 Mo (`reveal-container.gif`), 3,79 Mo (`reveal-port.gif`) et
+3,60 Mo (`reveal-ship.gif`), pour une limite de 5 Mo. Pour le port et le navire :
+- le ciel s'écarte d'au plus 1 niveau de la même réduction sans palette, donc sans bande ;
+- les étoiles ne varient pas d'un seul niveau entre leur apparition et la fin, ni pendant la tenue initiale.
+
+Images fixes : SVG vectoriels sans texte vivant, image ni filtre (les deux scènes de nuit ont un seul dégradé, celui
+du ciel), PNG 2000 × 1125, même plan que la dernière image de la vidéo 16:9 (PSNR 43,8, 47,1 et 46,8 dB). Pour le
+port et le navire, contrôle ciblé en plus : les 56 étoiles visibles à leur place, la lune, les feux, le haut du ciel.
+
+**Reproductibilité.** Chrome rend chaque image de façon déterministe, à une exception près, observée une fois : un
+rendu lancé sous très forte charge machine a produit 2 images de `light-16x9` (3,25 s) différentes, la dernière restant
+identique. Relancé normalement, le rendu est revenu identique au pixel près, et les MP4 identiques à l'octet près. Si
+le contrôle « strictement inchangé » échoue sur quelques images isolées, refaire ce rendu avant de chercher une cause
+dans le code.
 
 Le MP4 ne peut pas être identique au pixel près : le H.264 en 4:2:0 sous-échantillonne la couleur. Le PSNR mesure
 cet écart, invisible à l'œil au-delà de 40 dB. Dans la version sombre, la courbe OKLCH arrondie sur 8 bits fait une
@@ -281,15 +463,37 @@ image (9,78 s) : le contrôle d'image figée ne porte que sur les mouvements vis
   في الأسفل، والأبواب على اليمين بقضبان إقفالها.
 - تبقى الحاوية كاملة ثابتة لمدة ثانية.
 
-**الألوان:** الأزرق الداكن، والأزرق الليلي العميق، والبرتقالي الدولي (لون السلامة في الملاحة البحرية)، والأبيض. لا
-تدرّجات لونية في الصورة ولا مؤثرات، والحركة هادئة ودقيقة بلا ارتداد.
+**النهايتان البديلتان «الميناء» و«السفينة» (للنسخة الداكنة):**
+
+| التوقيت | ما نراه |
+|---|---|
+| من 0,0 إلى 9,8 ثانية | مطابقتان تمامًا لنهاية الحاوية، صورةً بصورة. |
+| من 9,8 إلى 12,0 ثانية | تواصل الكاميرا الابتعاد بهدوء. تصغر حاويتنا وتنزلق إلى مكانها، ويظهر المشهد حولها تدريجيًا: الرصيف أو السفينة، ثم أكوام الحاويات والرافعة، ثم تزداد السماء قتامة نحو الأعلى. بعدها تظهر النجوم واحدة تلو الأخرى، ثم القمر والأضواء. |
+| من 12,0 إلى 13,2 ثانية | يبقى المشهد العام ثابتًا لمدة 1,2 ثانية. |
+
+- **الميناء:** حاويتنا موضوعة على الرصيف في المقدمة، إلى يسار الوسط قليلًا (وفي الوسط تمامًا في الصيغة المربعة).
+  خلفها ثلاث أكوام من الحاويات بلا شعار ولا كتابة، من طبقتين، تصغر كلما ابتعدت، بدرجتين من الأزرق الليلي أفتح قليلًا. على
+  اليمين رافعة حاويات مرسومة بخط رفيع ترتفع في السماء، وفي أعلاها ضوء إشارة برتقالي صغير. في الأسفل
+  الرصيف، ثم البحر مع خمسة خطوط انعكاس بيضاء خافتة وثابتة.
+- **السفينة:** حاويتنا محمّلة على سطح سفينة حاويات في عرض البحر ليلًا. السفينة هي نفسها التي تظهر في بداية الحركة،
+  لكنها مملوءة بالأزرق الليلي ومحاطة بخطوط رفيعة، وتشغل 85 % من عرض الصورة. حاويتنا في الصف الأمامي، الأقرب إلى
+  الكاميرا، وهي الوحيدة التي تحمل الشعار. على الهيكل، تحت حاويتنا، تظهر علامة بليمسول (دائرة يقطعها خط، بالأبيض)،
+  وخطها عند سطح الماء تمامًا: السفينة محمّلة «بالقدر الصحيح». ضوء برتقالي في أعلى الصاري وضوء أبيض في المقدمة،
+  والبحر أغمق بدرجة، مع أربعة خطوط انعكاس خافتة، بلا أمواج.
+- **السماء:** أزرق ليلي يزداد قتامة قليلًا نحو الأعلى، و56 نجمة صغيرة ثابتة لا تومض، وهلال رفيع بلون أبيض مائل إلى
+  الزرقة في الأعلى إلى اليمين. لا تظهر أي نجمة حول الشعار ولا خلف الكتابة.
+- يبقى عرض الشعار في اللقطة الأخيرة أكبر من 12 % من عرض الصورة، فيبقى مقروءًا. البرتقالي حكر على خط الشعار وأضواء
+  الإشارة.
+
+**الألوان:** الأزرق الداكن، والأزرق الليلي العميق ودرجاته، والبرتقالي الدولي (لون السلامة في الملاحة البحرية)،
+والأبيض. لا مؤثرات، ولا تدرّج لونيًا إلا في سماء الليل بلونين متقاربين، والحركة هادئة ودقيقة بلا ارتداد.
 
 **الصيغ المتوفرة:**
 
-- فيديو أفقي 16:9 وآخر مربّع 1:1 لكل نسخة من النسختين؛
-- فيديو أفقي للنهاية البديلة؛
-- صورتا GIF متحركتان للتوقيع الإلكتروني وتطبيقات المراسلة؛
-- صورة ثابتة للحاوية للمطويات والموقع الإلكتروني.
+- فيديو أفقي 16:9 وآخر مربّع 1:1 لكل نسخة من النسختين، ولكل من نهايتي الميناء والسفينة؛
+- فيديو أفقي لنهاية الحاوية؛
+- أربع صور GIF متحركة للتوقيع الإلكتروني وتطبيقات المراسلة (النسخة الداكنة، الحاوية، الميناء، السفينة)؛
+- ثلاث صور ثابتة للمطويات والموقع الإلكتروني: الحاوية، والميناء ليلًا، والسفينة ليلًا.
 
 كل النسخ بدون صوت.
 

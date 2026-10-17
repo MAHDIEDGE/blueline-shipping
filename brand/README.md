@@ -22,12 +22,15 @@ situation : en-tête de site, carte de visite, flanc de conteneur.
 
 ## Motion et mockups (concept 05)
 
-- [`motion/`](motion/) contient l'animation de révélation du logo (8 s), en version claire ou sombre, plus une fin
-  alternative sur un conteneur (version sombre, 10,8 s). Elle existe en page HTML autonome, en MP4 60 i/s (16:9 et 1:1) et en GIF pour les
-  signatures. La dernière image est identique au pixel près au logo SVG. Storyboard (FR et AR) et commandes dans
+- [`motion/`](motion/) contient l'animation de révélation du logo (8 s), en version claire ou sombre, plus trois fins
+  alternatives en version sombre : le conteneur (10,8 s), puis, en prolongeant le recul, le port ou le navire de nuit
+  (13,2 s). Elle existe en page HTML autonome, en MP4 60 i/s (16:9 et 1:1) et en GIF pour les signatures. La dernière
+  image de la version logo seul est identique au pixel près au logo SVG. Storyboards (FR et AR) et commandes dans
   [`motion/README.md`](motion/README.md).
-- [`mockups/container-dark.svg`](mockups/container-dark.svg) (+ `.png` 2000 px) montre le logo sur le flanc d'un
-  conteneur 40' Marine nuit, pour les plaquettes et le site.
+- [`mockups/`](mockups/) : images fixes pour les plaquettes et le site, en SVG et en PNG 2000 px.
+  - `container-dark` : le logo sur le flanc d'un conteneur 40' Marine nuit.
+  - `port-night` : ce conteneur sur le quai, de nuit.
+  - `ship-night` : ce conteneur sur le pont d'un porte-conteneurs, de nuit.
 
 ## Arborescence
 
@@ -35,7 +38,7 @@ situation : en-tête de site, carte de visite, flanc de conteneur.
 brand/
 ├── index.html                 page de présentation (générée)
 ├── motion/                    animation de révélation du logo retenu (voir motion/README.md)
-├── mockups/                   images de mise en situation (conteneur 40')
+├── mockups/                   images de mise en situation (conteneur 40', port et navire de nuit)
 ├── logos/
 │   └── concept-0X/
 │       ├── logo-horizontal.svg          symbole + nom côte à côte
